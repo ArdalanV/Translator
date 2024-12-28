@@ -1,0 +1,31 @@
+Design Document
+
+Goal:
+-To create a program that successfully takes in a Python file in English and outputs a Python file in a target language or will take in a Python file in another language, and will convert it to English Python code
+
+Program Inputs:
+-A valid Python File or path to a valid Python file
+-The language we want to convert the code into
+
+Run.py:
+-Where the program is ran and where the algorithm is executed
+-Parses the command line arguments for the program
+-Runs the appropriate translation algorithm
+-Returns the translated Python file
+
+Utils.py:
+-Where necessary classes and functions utilized by run.py are written
+
+Translations.py:
+-Where all the mappings of translations are stored
+
+### English to Target Language Implementation
+
+Algorithm:
+-Convert the Python File to a string
+-Create an abstract syntax tree from the string
+-Traverse through the abstract syntax tree to replace Python built ins with mappings
+-Unparse the abstract syntax tree into a string
+-Run the string through the brute force string modifying algorithm
+-Put modified string through LLM for the user-defined variables, functions, etc to be translated
+-Convert the string back to a file and output the file
