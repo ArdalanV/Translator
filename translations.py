@@ -1,5 +1,5 @@
-english_to_spanish = {
-    # Keywords
+Spanish = [{
+    #keywords
     'False': 'Falso',
     'None': 'Ninguno',
     'True': 'Verdadero',
@@ -11,10 +11,10 @@ english_to_spanish = {
     'break': 'romper',
     'class': 'clase',
     'continue': 'continuar',
-    'def': 'función',
+    'def': 'def',
     'del': 'borrar',
     'elif': 'sino_si',
-    'else': 'sino',
+    'else:': 'sino:',
     'except': 'excepto',
     'finally': 'finalmente',
     'for': 'para',
@@ -31,12 +31,13 @@ english_to_spanish = {
     'pass': 'pasar',
     'raise': 'elevar',
     'return': 'retornar',
-    'try': 'intentar',
+    'try:': 'intentar',
     'while': 'mientras',
     'with': 'con',
     'yield': 'ceder',
-    
-    # Built-ins
+    'self.': 'yo.',
+
+    #built ins
     'abs': 'abs',
     'all': 'todo',
     'any': 'alguno',
@@ -104,5 +105,4 @@ english_to_spanish = {
     'type': 'tipo',
     'vars': 'variables',
     'zip': 'zip',
-    '__import__': '__importar__',
-}
+    '__import__': '__importar__'}, {}]

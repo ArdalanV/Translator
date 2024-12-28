@@ -3,7 +3,6 @@ import translations
 import argparse
 
 
-
 def main():
     #Create argument parser
     parser = argparse.ArgumentParser(prog='Translation',
@@ -20,7 +19,7 @@ def main():
     input_file = args.input
     target_language = args.lang
 
-    #try opening the file and reading
+    #Try opening the file and reading
     try:
         file_content = utils.read_file(input_file)
         print(f"Successfully read file: {input_file}")
@@ -28,10 +27,18 @@ def main():
         print(e)
         return
     
-    #translation logic to go here
-
-
-
+    #Check target language, if English then algorithm needs to collapse all languages to English
+    if target_language == "English":
+        return other_to_english(input_file, target_language, 0)
+    #Translate from other language to English
+    if target_language in utils.Languages:
+        return english_to_other(input_file, target_language, 1)
+    
+    def other_to_english(file, language, index):
+        pass
+    
+    def english_to_other(file, language, index):
+        pass
 
 
 if __name__ == "main":
