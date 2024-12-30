@@ -27,19 +27,18 @@ def main():
         print(e)
         return
     
-    #Check target language, if English then algorithm needs to collapse all languages to English
-    if target_language == "English":
-        return other_to_english(input_file, target_language, 0)
     #Translate from other language to English
     if target_language in utils.Languages:
-        return english_to_other(input_file, target_language, 1)
+        return utils.english_to_other(file_content, target_language, 0)
     
-    def other_to_english(file, language, index):
-        pass
+    #Check target language, if English then algorithm needs to collapse all languages to English
+    elif target_language == "English":
+        return utils.other_to_english(file_content, target_language, 1)
+    else:
+        print(f"Error: Target language '{target_language}' not supported.")
+        return
     
-    def english_to_other(file, language, index):
-        pass
 
-
-if __name__ == "main":
+if __name__ == "__main__":
+    print("Starting script")
     main()

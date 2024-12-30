@@ -35,7 +35,7 @@ Spanish = [{
     'while': 'mientras',
     'with': 'con',
     'yield': 'ceder',
-    'self.': 'yo.',
+    'self': 'soy',
 
     #built ins
     'abs': 'abs',
@@ -105,4 +105,10 @@ Spanish = [{
     'type': 'tipo',
     'vars': 'variables',
     'zip': 'zip',
-    '__import__': '__importar__'}, {}]
+    '__import__': '__importar__',
+    '__init__': '__inic__'}, {}]
+
+Persian = [{}, {}]
+French = [{}, {}]
+German = [{}, {}]
+Italian = [{}, {}]
