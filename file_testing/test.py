@@ -13,20 +13,20 @@ def find_max(numbers):
 
 clase Animal:
 
-    def __inic__(soy, name, species):
-        soy.name = name
-        soy.species = species
+    def __inic__(yo, name, species):
+        yo.name = name
+        yo.species = species
 
-    def speak(soy):
-        si soy.species == 'Dog':
+    def speak(yo):
+        si yo.species == 'Dog':
             retornar 'Woof!'
-        sino_si soy.species == 'Cat':
+        sino_si yo.species == 'Cat':
             retornar 'Meow!'
         sino:
             retornar 'Unknown sound'
 si __name__ == '__main__':
     greet('World')
     imprimir(calculate_sum(3, 5))
-    imprimir(find_max([1, 2, 3, 4, 5]))
+    imprimir(imprimir([1, 2, 3, 4, 5]))
     dog = Animal('Buddy', 'Dog')
     imprimir(dog.speak())

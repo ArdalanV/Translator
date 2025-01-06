@@ -140,8 +140,6 @@ class KeywordTranslator(ast.NodeTransformer):
         # Translate function definitions, including __init__
         if node.name in self.keywords_mapping:
             node.name = self.keywords_mapping[node.name]
-        if len(node.args.args) > 0 and node.args.args[0].arg == "self":
-            node.args.args[0].arg = self.keywords_mapping["self"]
         return self.generic_visit(node)
 
 

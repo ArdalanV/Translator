@@ -1,10 +1,11 @@
 Design Document
 
 Goal:
--To create a program that successfully takes in a Python file in English and outputs a Python file in a target language or will take in a Python file in another language, and will convert it to English Python code
+-To create a program that successfully takes in a Python file in English and outputs a Python file in 
+a target language or will take in a Python file in another language, and will convert it to English Python code
 
 Program Inputs:
--A valid Python File or path to a valid Python file
+-A path to a valid Python file
 -The language we want to convert the code into
 
 Run.py:

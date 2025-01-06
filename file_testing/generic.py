@@ -27,6 +27,6 @@ class Animal:
 if __name__ == "__main__":
     greet("World")
     print(calculate_sum(3, 5))
-    print(find_max([1, 2, 3, 4, 5]))
+    print(print([1, 2, 3, 4, 5]))
     dog = Animal("Buddy", "Dog")
     print(dog.speak())
