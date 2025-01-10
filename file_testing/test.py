@@ -13,11 +13,11 @@ def find_max(numbers):
 
 clase Animal:
 
-    def __inic__(yo, name, species):
+    def __inic__(self, name, species):
         yo.name = name
         yo.species = species
 
-    def speak(yo):
+    def speak(self):
         si yo.species == 'Dog':
             retornar 'Woof!'
         sino_si yo.species == 'Cat':

@@ -102,21 +102,70 @@ def get_lang_mapping(language, direction):
     elif language == "Italian":
         return translations.Italian[direction]
     
-def other_to_english(file, language, index):
-    pass
+def reverse_keyword_parser(code, translation_mapping):
+    """
+    Pre-process the code by replacing foreign-language keywords and built-ins
+    with their English equivalents.
+
+    Parameters:
+        code (str): The code in a foreign language (e.g., Spanish).
+        translation_mapping (dict): Dictionary mapping foreign-language keywords to English.
+
+    Returns:
+        str: The code converted to standard English Python syntax.
+    """
+    translated_lines = []
+    for line in code.split("\n"):
+        # Preserve leading indentation
+        leading_whitespace = len(line) - len(line.lstrip())
+        indent = " " * leading_whitespace
+        # Process the line
+        words = line.split()
+        translated_line = []
+        for word in words:
+            # Replace the word if it's in the translation mapping
+            if "." in word:
+                updated = ""
+                split = word.split(".")
+                i, length = 0, len(split)
+                for w in split:
+                    if w in translation_mapping:
+                        updated += translation_mapping[w]
+                        updated += "."
+                    elif i < length - 1:
+                        updated += w
+                        updated += "."
+                    else:
+                        updated += w
+                    i += 1
+                translated_line.append(updated)
+            elif word in translation_mapping:
+                translated_line.append(translation_mapping[word])
+            else:
+                translated_line.append(word)
+        translated_lines.append(indent + " ".join(translated_line))
+    return "\n".join(translated_lines)
+    
+def other_to_english(input_file, language, index):
+    translation_mapping = get_lang_mapping(language, index)
+    code = reverse_keyword_parser(input_file, translation_mapping)
+    code = ast_translation(code, translation_mapping)
+    with open("file_testing/test2.py", "w", encoding="utf-8") as file:
+        file.write(code)
+        print(f"Python file test2.py successfully created")
     
 def english_to_other(input_file, language, index):
     translation_mapping = get_lang_mapping(language, index)
     code = ast_translation(input_file, translation_mapping)
     code = keyword_parser(code, translation_mapping)
-    with open("file_testing/test.py", "w", encoding="utf-8") as file:
+    with open("file_testing/test1.py", "w", encoding="utf-8") as file:
         file.write(code)
-        print(f"Python file test.py successfully created")
+        print(f"Python file test1.py successfully created")
+
     
     
 
 class KeywordTranslator(ast.NodeTransformer):
-
 
     def __init__(self, keyword_mapping):
         self.keywords_mapping = keyword_mapping
@@ -131,7 +180,6 @@ class KeywordTranslator(ast.NodeTransformer):
         # Translate the function being called
         if isinstance(node.func, ast.Name) and node.func.id in self.keywords_mapping:
             node.func.id = self.keywords_mapping[node.func.id]
-
         # Recursively visit arguments to handle nested translations
         node.args = [self.visit(arg) for arg in node.args]
         return self.generic_visit(node)
@@ -141,6 +189,6 @@ class KeywordTranslator(ast.NodeTransformer):
         if node.name in self.keywords_mapping:
             node.name = self.keywords_mapping[node.name]
         return self.generic_visit(node)
-
-
+    
+    
     

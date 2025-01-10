@@ -10,14 +10,16 @@ def main():
                                      )
     #Defining command line arguments
     parser.add_argument("--input", required=True, help="Path to the input Python file")
-    parser.add_argument("--lang", required=True, help="Target translation language i.e. 'Spanish', 'Farsi'")
+    parser.add_argument("--lang1", required=True, help="Language of file's contents")
+    parser.add_argument("--lang2", required=True, help="Target language for translation")
 
     #Parse arguments
     args = parser.parse_args()
 
     #Get the inputs
     input_file = args.input
-    target_language = args.lang
+    target_language1 = args.lang1
+    target_language2 = args.lang2
 
     #Try opening the file and reading
     try:
@@ -27,15 +29,15 @@ def main():
         print(e)
         return
     
-    #Translate from other language to English
-    if target_language in utils.Languages:
-        return utils.english_to_other(file_content, target_language, 0)
+    #Translate from English to another language
+    if target_language1 == "English" and target_language2 in utils.Languages:
+        return utils.english_to_other(file_content, target_language2, 0)
     
     #Check target language, if English then algorithm needs to collapse all languages to English
-    elif target_language == "English":
-        return utils.other_to_english(file_content, target_language, 1)
+    elif target_language1 in utils.Languages and target_language2 == "English":
+        return utils.other_to_english(file_content, target_language1, 1)
     else:
-        print(f"Error: Target language '{target_language}' not supported.")
+        print(f"Error: Please select a valid translation mapping")
         return
     
 
