@@ -31,11 +31,12 @@ Spanish = [{
     'pass': 'pasar',
     'raise': 'elevar',
     'return': 'retornar',
-    'try:': 'intentar',
+    'try:': 'intentar:',
     'while': 'mientras',
     'with': 'con',
     'yield': 'ceder',
     'self': 'yo',
+    "else": "sino",
 
     #built ins
     'abs': 'abs',
@@ -107,6 +108,7 @@ Spanish = [{
     'zip': 'zip',
     '__import__': '__importar__',
     '__init__': '__inic__'}, 
+    
     {'Falso': 'False',
     'Ninguno': 'None',
     'Verdadero': 'True',

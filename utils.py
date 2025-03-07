@@ -44,7 +44,6 @@ def keyword_parser(code, translation_mapping):
         # Preserve the leading whitespace (indentation)
         leading_whitespace = len(line) - len(line.lstrip())
         indent = " " * leading_whitespace
-        
         # Process the rest of the line
         words = line.split()  # Split the line into words
         translated_line = []
@@ -185,10 +184,22 @@ class KeywordTranslator(ast.NodeTransformer):
         return self.generic_visit(node)
     
     def visit_FunctionDef(self, node):
-        # Translate function definitions, including __init__
+        # Translate fsunction definitions, including __init__
         if node.name in self.keywords_mapping:
             node.name = self.keywords_mapping[node.name]
+        for arg in node.args.args:
+            if arg.arg in self.keywords_mapping:
+                arg.arg = self.keywords_mapping[arg.arg]
         return self.generic_visit(node)
     
+    def visit_Lambda(self, node):
+        node.args = self.visit(node.args)
+        node.body = self.visit(node.body)
+        return self.generic_visit(node)
+
+    def visit_IfExp(self, node):
+        # Translate `else` within inline expressions like lambdas
+        return self.generic_visit(node)  # Visit the children
+
     
     
