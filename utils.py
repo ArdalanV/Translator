@@ -225,6 +225,9 @@ def other_to_english(input_file: str, language: str, index: int):
     preprocessed = keyword_parser(input_file, translation_mapping)
     preprocessed = ast_translation(preprocessed, translation_mapping)
     translated_code = query_openai_translation(input_file, preprocessed, language, "English")
+    if type(translated_code) == False:
+        print("failed to translate")
+        return
     with open("file_testing/test2.py", "w", encoding="utf-8") as file:
         file.write(translated_code)
         print(f"Python file test2.py successfully created")
@@ -246,6 +249,9 @@ def english_to_other(input_file: str, language: str, index: int):
     preprocessed = ast_translation(input_file, translation_mapping)
     preprocessed = keyword_parser(preprocessed, translation_mapping)
     translated_code = query_openai_translation(input_file, preprocessed, "English", language)
+    if type(translated_code) == False:
+        print("failed to translate")
+        return
     with open("file_testing/test1.py", "w", encoding="utf-8") as file:
         file.write(translated_code)
         print(f"Python file test1.py successfully created")
