@@ -37,6 +37,7 @@ Spanish = [{
     'yield': 'ceder',
     'self': 'yo',
     "else": "sino",
+    "int": "entero",
 
     #built ins
     'abs': 'abs',

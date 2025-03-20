@@ -10,6 +10,11 @@ import os
 def greet_user(name):
     print(f"Hello, {name}! Welcome to the program.")
 
+def simple_function(brother: int) -> int:
+    if brother and not brother:
+        if 3 or True and False:
+            return brother
+
 # A function to calculate the area of a circle
 def calculate_circle_area(radius):
     if radius <= 0:

@@ -1,32 +1,28 @@
-def greet(name):
-    print(f'Hello, {name}!')
+import numpy as np
 
-def calculate_sum(a, b):
-    return a + b
+def quantos_anos(soy_anos):
+    print(f'Yo tengo {soy_anos} anos')
 
-def find_max(numbers):
-    max_num = numbers[0]
-    for num in numbers:
-        if num > max_num:
-            max_num = num
-    return max_num
+class Pero:
 
-class Animal:
+    def __init__(self, color):
+        self.color = color
 
-    def __init__(self, name, species):
-        self.name = name
-        self.species = species
+    def quieres(self):
+        nonlocal self
+        return self.color
+pero_uno = Pero('rojo')
+print(pero_uno.quieres())
+familia = ['Taghi, Parastou, Arzhang']
 
-    def speak(self):
-        if self.species == 'Dog':
-            return 'Woof!'
-        elif self.species == 'Cat':
-            return 'Meow!'
-        else:
-            return 'Unknown sound'
-if __name__ == '__main__':
-    greet('World')
-    print(calculate_sum(3, 5))
-    print(print([1, 2, 3, 4, 5]))
-    dog = Animal('Buddy', 'Dog')
-    print(dog.speak())
+def mi_familia(papa, mama, hermano):
+    if papa in familia:
+        print(f'Si! {papa} in mi familia')
+    else:
+        print(f'No! {papa} not in mi familia')
+    if mama in familia and hermano not in familia:
+        print(f'{mama} in mi familia. {hermano} from nada')
+    elif hermano in familia and mama not in familia:
+        return lambda x: print(mama)
+    else:
+        return False == True

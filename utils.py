@@ -1,5 +1,8 @@
 import ast
 import translations
+import os
+import openai 
+
 
 Languages = ["Persian", "Spanish", "Italian", "German", "French"]
 
@@ -145,21 +148,96 @@ def reverse_keyword_parser(code, translation_mapping):
         translated_lines.append(indent + " ".join(translated_line))
     return "\n".join(translated_lines)
     
-def other_to_english(input_file, language, index):
+def other_to_english(input_file: str, language: str, index: int):
+    """
+    The hard coding algorithm for translating a Python file in another language
+    to English.
+
+    Parameters:
+        input_file: The Python file to be translated
+        language: The language which has to be English
+        index: The index of the language mapping that corresponds to foreign language to English
+
+    Returns:
+        .py: A .py file that contains the translated code from the input_file to English
+        
+    """
     translation_mapping = get_lang_mapping(language, index)
-    code = reverse_keyword_parser(input_file, translation_mapping)
+    code = keyword_parser(input_file, translation_mapping)
     code = ast_translation(code, translation_mapping)
     with open("file_testing/test2.py", "w", encoding="utf-8") as file:
         file.write(code)
         print(f"Python file test2.py successfully created")
     
-def english_to_other(input_file, language, index):
+def english_to_other(input_file: str, language: str, index: int):
+    """
+    The hard coding algorithm for translating a Python file from English to
+    another language.
+
+    Parameters:
+        input_file: The python file to be translated
+        language: The language which was to be a valid non English choice
+        index: The index of the language mapping that corresponds to English to 'language'
+
+    Returns:
+        .py: A .py file that contains translated Python code from
+    """
+
+    #Get the translation mappings for the specified language
     translation_mapping = get_lang_mapping(language, index)
+    
+    #Traverse the abstract syntax tree and translate built in functions
     code = ast_translation(input_file, translation_mapping)
+
+    #Algorithmically translate all builts that aren't functions
     code = keyword_parser(code, translation_mapping)
+
+    #Use LLM to th
+
     with open("file_testing/test1.py", "w", encoding="utf-8") as file:
         file.write(code)
         print(f"Python file test1.py successfully created")
+
+def load_prompt(prompt: str):
+    """
+    Reads a prompt file from the prompts directory.
+
+    Parameters:
+        prompt : name of the .txt file to be used as a prompt from prompts directory
+
+    Returns:
+        str : the desired prompt to be used for the LLM call
+    """
+    #try reading the desired prompt
+    try:
+        with open(f"../prompts/{prompt}.txt", "r", encoding="utf-8") as file:
+            return file.read()
+    #otherwise return False and kill the program
+    except FileNotFoundError:
+        print("Prompt was not found")
+        return False
+
+def query_openai_translation(input_file, preprocessed, source_language, target_language):
+    """
+    Queries OpenAI API to translate all user-defined instances along with
+    all comments into the target language desired. Returns the fully translated
+    output file as desired.
+
+    Parameters:
+        original: The original input file
+        preprocessed: The preprocessed input_file
+        target_language: The desired output language of the file
+
+    Returns:
+        str: Translated Python code
+    """
+    prompt_template = load_prompt("prompt1")
+    prompt = prompt_template.format(
+        source_language=source_language,
+        target_language=target_language,
+        
+        )
+
 
     
     
