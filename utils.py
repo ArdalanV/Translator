@@ -6,7 +6,7 @@ import openai
 
 Languages = ["Persian", "Spanish", "Italian", "German", "French"]
 
-def read_file(file_path):
+def read_file(file_path: str):
     """
     Reads the content of a file and returns it as a string.
 
@@ -63,7 +63,7 @@ def keyword_parser(code, translation_mapping):
     translated_code = "\n".join(translated_lines)
     return translated_code
 
-def ast_translation(code, translation_mapping):
+def ast_translation(code: str, translation_mapping: dict):
     """
     Creates an abstract syntax tree (ast) with the file code, then traverses the 
     ast while translating the built ins
@@ -84,7 +84,7 @@ def ast_translation(code, translation_mapping):
     modified_code = ast.unparse(translated_built_ins)
     return modified_code
     
-def get_lang_mapping(language, direction):
+def get_lang_mapping(language: str, direction: int):
     """
     Finds and picks which language mapping dictionary from translations.py
     to use for the translation algorithm.
@@ -104,7 +104,7 @@ def get_lang_mapping(language, direction):
     elif language == "Italian":
         return translations.Italian[direction]
     
-def reverse_keyword_parser(code, translation_mapping):
+def reverse_keyword_parser(code: str, translation_mapping: dict):
     """
     Pre-process the code by replacing foreign-language keywords and built-ins
     with their English equivalents.
@@ -148,6 +148,7 @@ def reverse_keyword_parser(code, translation_mapping):
         translated_lines.append(indent + " ".join(translated_line))
     return "\n".join(translated_lines)
 
+#Loads desired prompt from prompts directory
 def load_prompt(prompt: str):
     """
     Reads a prompt file from the prompts directory.
@@ -169,7 +170,8 @@ def load_prompt(prompt: str):
 
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
-def query_openai_translation(input_file, preprocessed, source_language, target_language):
+#Queries OpenAI API
+def query_openai_translation(input_file: str, preprocessed: str, source_language: str, target_language: str):
     """
     Queries OpenAI API to translate all user-defined instances along with
     all comments into the target language desired. Returns the fully translated
@@ -183,7 +185,7 @@ def query_openai_translation(input_file, preprocessed, source_language, target_l
     Returns:
         str: Translated Python code
     """
-    #Load prompt and format properly
+    #Load desired prompt and format properly
     prompt_template = load_prompt("prompt1")
     prompt = prompt_template.format(
         source_language=source_language,
@@ -205,7 +207,6 @@ def query_openai_translation(input_file, preprocessed, source_language, target_l
         print(f"OpenAI API error: {e}")
         return False
 
-    
 def other_to_english(input_file: str, language: str, index: int):
     """
     The hard coding algorithm for translating a Python file in another language
@@ -221,10 +222,11 @@ def other_to_english(input_file: str, language: str, index: int):
         
     """
     translation_mapping = get_lang_mapping(language, index)
-    code = keyword_parser(input_file, translation_mapping)
-    code = ast_translation(code, translation_mapping)
+    preprocessed = keyword_parser(input_file, translation_mapping)
+    preprocessed = ast_translation(preprocessed, translation_mapping)
+    translated_code = query_openai_translation(input_file, preprocessed, language, "English")
     with open("file_testing/test2.py", "w", encoding="utf-8") as file:
-        file.write(code)
+        file.write(translated_code)
         print(f"Python file test2.py successfully created")
     
 def english_to_other(input_file: str, language: str, index: int):
@@ -240,20 +242,12 @@ def english_to_other(input_file: str, language: str, index: int):
     Returns:
         .py: A .py file that contains translated Python code from
     """
-
-    #Get the translation mappings for the specified language
     translation_mapping = get_lang_mapping(language, index)
-    
-    #Traverse the abstract syntax tree and translate built in functions
-    code = ast_translation(input_file, translation_mapping)
-
-    #Algorithmically translate all builts that aren't functions
-    code = keyword_parser(code, translation_mapping)
-
-    #Use LLM to th
-
+    preprocessed = ast_translation(input_file, translation_mapping)
+    preprocessed = keyword_parser(preprocessed, translation_mapping)
+    translated_code = query_openai_translation(input_file, preprocessed, "English", language)
     with open("file_testing/test1.py", "w", encoding="utf-8") as file:
-        file.write(code)
+        file.write(translated_code)
         print(f"Python file test1.py successfully created")
 
 class KeywordTranslator(ast.NodeTransformer):
