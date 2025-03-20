@@ -147,6 +147,64 @@ def reverse_keyword_parser(code, translation_mapping):
                 translated_line.append(word)
         translated_lines.append(indent + " ".join(translated_line))
     return "\n".join(translated_lines)
+
+def load_prompt(prompt: str):
+    """
+    Reads a prompt file from the prompts directory.
+
+    Parameters:
+        prompt : name of the .txt file to be used as a prompt from prompts directory
+
+    Returns:
+        str : the desired prompt to be used for the LLM call
+    """
+    #try reading the desired prompt
+    try:
+        with open(f"../prompts/{prompt}.txt", "r", encoding="utf-8") as file:
+            return file.read()
+    #otherwise return False and kill the program
+    except FileNotFoundError:
+        print("Prompt was not found")
+        return False
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+def query_openai_translation(input_file, preprocessed, source_language, target_language):
+    """
+    Queries OpenAI API to translate all user-defined instances along with
+    all comments into the target language desired. Returns the fully translated
+    output file as desired.
+
+    Parameters:
+        original: The original input file
+        preprocessed: The preprocessed input_file
+        target_language: The desired output language of the file
+
+    Returns:
+        str: Translated Python code
+    """
+    #Load prompt and format properly
+    prompt_template = load_prompt("prompt1")
+    prompt = prompt_template.format(
+        source_language=source_language,
+        target_language=target_language,
+        input_file = input_file,
+        preprocessed = preprocessed
+        )
+    #Make OpenAI API call
+    try:
+        response = openai.ChatCompletion.create(
+            model="gpt-4-turbo",
+            messages=[{"role": "user", "content": prompt}],
+            temperature=0.0,
+        )
+        print(response)
+        return response["choices"][0]["message"]["content"]
+    #
+    except Exception as e:
+        print(f"OpenAI API error: {e}")
+        return False
+
     
 def other_to_english(input_file: str, language: str, index: int):
     """
@@ -197,50 +255,6 @@ def english_to_other(input_file: str, language: str, index: int):
     with open("file_testing/test1.py", "w", encoding="utf-8") as file:
         file.write(code)
         print(f"Python file test1.py successfully created")
-
-def load_prompt(prompt: str):
-    """
-    Reads a prompt file from the prompts directory.
-
-    Parameters:
-        prompt : name of the .txt file to be used as a prompt from prompts directory
-
-    Returns:
-        str : the desired prompt to be used for the LLM call
-    """
-    #try reading the desired prompt
-    try:
-        with open(f"../prompts/{prompt}.txt", "r", encoding="utf-8") as file:
-            return file.read()
-    #otherwise return False and kill the program
-    except FileNotFoundError:
-        print("Prompt was not found")
-        return False
-
-def query_openai_translation(input_file, preprocessed, source_language, target_language):
-    """
-    Queries OpenAI API to translate all user-defined instances along with
-    all comments into the target language desired. Returns the fully translated
-    output file as desired.
-
-    Parameters:
-        original: The original input file
-        preprocessed: The preprocessed input_file
-        target_language: The desired output language of the file
-
-    Returns:
-        str: Translated Python code
-    """
-    prompt_template = load_prompt("prompt1")
-    prompt = prompt_template.format(
-        source_language=source_language,
-        target_language=target_language,
-        
-        )
-
-
-    
-    
 
 class KeywordTranslator(ast.NodeTransformer):
 
