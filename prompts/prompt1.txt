@@ -14,20 +14,17 @@ You will be given two Python files:
 
 ### **Example (English to Spanish)**
 #### **Original File:**
-```python
 def greet(name):  # This function prints a greeting
     print("Hello, " + name)
 
 greet("Alice")
 
 #### **Preprocessed File:**
-```python
 def greet(name):
     imprimir("Hello, " + name)
 greet("Alice")
 
 #### **Output File:**
-```python
 def saludar(nombre): # Esta función imprime un saludo
     imprimir("Hola, " + nombre)
 

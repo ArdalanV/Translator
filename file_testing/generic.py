@@ -97,4 +97,3 @@ if __name__ == "__main__":
     print(calc.multiply(10, 5))
     print(calc.divide(10, 0))  # Test division by zero
     calc.show_history()
-

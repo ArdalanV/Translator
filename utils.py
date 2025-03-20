@@ -54,6 +54,8 @@ def keyword_parser(code, translation_mapping):
             # Replace the word if it's a keyword in the translation dictionary
             if word in translation_mapping:
                 translated_line.append(translation_mapping[word])
+            elif word[0] == '(':
+                translated_line.append('(' + keyword_parser(word[1:-1] + ')', translation_mapping))
             else:
                 translated_line.append(word)
         # Reconstruct the translated line with indentation
@@ -161,7 +163,7 @@ def load_prompt(prompt: str):
     """
     #try reading the desired prompt
     try:
-        with open(f"../prompts/{prompt}.txt", "r", encoding="utf-8") as file:
+        with open(f"prompts/{prompt}.txt", "r", encoding="utf-8") as file:
             return file.read()
     #otherwise return False and kill the program
     except FileNotFoundError:
@@ -195,13 +197,19 @@ def query_openai_translation(input_file: str, preprocessed: str, source_language
         )
     #Make OpenAI API call
     try:
-        response = openai.ChatCompletion.create(
-            model="gpt-4-turbo",
-            messages=[{"role": "user", "content": prompt}],
+        client = openai.OpenAI()
+        response = client.chat.completions.create(
+            model="gpt-4o",
             temperature=0.0,
+            messages=[
+                {
+                    "role": "user", 
+                    "content": prompt
+                }
+            ]
         )
         print(response)
-        return response["choices"][0]["message"]["content"]
+        return response.choices[0].message.content
     #
     except Exception as e:
         print(f"OpenAI API error: {e}")
@@ -225,7 +233,7 @@ def other_to_english(input_file: str, language: str, index: int):
     preprocessed = keyword_parser(input_file, translation_mapping)
     preprocessed = ast_translation(preprocessed, translation_mapping)
     translated_code = query_openai_translation(input_file, preprocessed, language, "English")
-    if type(translated_code) == False:
+    if translated_code == False:
         print("failed to translate")
         return
     with open("file_testing/test2.py", "w", encoding="utf-8") as file:
@@ -249,7 +257,7 @@ def english_to_other(input_file: str, language: str, index: int):
     preprocessed = ast_translation(input_file, translation_mapping)
     preprocessed = keyword_parser(preprocessed, translation_mapping)
     translated_code = query_openai_translation(input_file, preprocessed, "English", language)
-    if type(translated_code) == False:
+    if translated_code == False:
         print("failed to translate")
         return
     with open("file_testing/test1.py", "w", encoding="utf-8") as file:
@@ -293,5 +301,3 @@ class KeywordTranslator(ast.NodeTransformer):
         # Translate `else` within inline expressions like lambdas
         return self.generic_visit(node)  # Visit the children
 
-    
-    

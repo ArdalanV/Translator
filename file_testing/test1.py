@@ -1,87 +1,87 @@
-"""
-A sample Python script for testing code translation.
-Includes classes, functions, loops, conditionals, and built-in functions.
-"""
-import math
-import os
+importar math
+importar os
 
-def greet_user(name):
-    imprimir(f'Hello, {name}! Welcome to the program.')
+# Una función simple para saludar a un usuario
+def saludar_usuario(nombre):
+    imprimir(f'Hello, {nombre}! Welcome to the program.')
 
-def simple_function(brother: entero) -> entero:
-    if brother and (not brother):
-        if 3 or (True and False):
-            return brother
+def funcion_simple(hermano: entero) -> entero:
+    si hermano y (not hermano):
+        si 3 o (True y False):
+            retornar hermano
 
-def calculate_circle_area(radius):
-    if radius <= 0:
+# Una función para calcular el área de un círculo
+def calcular_area_circulo(radio):
+    si radio <= 0:
         imprimir('Invalid radius. Radius must be greater than 0.')
-        return None
-    return math.pi * radius ** 2
+        retornar Ninguno
+    retornar math.pi * radio ** 2
 
-def count_lines_in_file(file_path):
-    try:
-        with abrir(file_path, 'r') as file:
-            lines = file.readlines()
-            imprimir(f"The file '{file_path}' has {longitud(lines)} lines.")
-            return longitud(lines)
-    except FileNotFoundError:
-        imprimir(f"Error: The file '{file_path}' was not found.")
-        return 0
+# Una función para leer un archivo y contar sus líneas
+def contar_lineas_en_archivo(ruta_archivo):
+    intentar:
+        con abrir(ruta_archivo, 'r') como archivo:
+            lineas = archivo.readlines()
+            imprimir(f"The file '{ruta_archivo}' has {longitud(lineas)} lines.")
+            retornar longitud(lineas)
+    excepto FileNotFoundError:
+        imprimir(f"Error: The file '{ruta_archivo}' was no found.")
+        retornar 0
 
-class Calculator:
+# Una clase que representa una calculadora básica
+clase Calculadora:
 
     def __inic__(yo):
-        yo.history = []
+        yo.historial = []
 
-    def add(yo, a, b):
-        result = a + b
-        yo.history.append(f'Added {a} and {b}: {result}')
-        return result
+    def sumar(yo, a, b):
+        resultado = a + b
+        yo.historial.append(f'Added {a} y {b}: {resultado}')
+        retornar resultado
 
-    def subtract(yo, a, b):
-        result = a - b
-        yo.history.append(f'Subtracted {b} from {a}: {result}')
-        return result
+    def restar(yo, a, b):
+        resultado = a - b
+        yo.historial.append(f'Subtracted {b} de {a}: {resultado}')
+        retornar resultado
 
-    def multiply(yo, a, b):
-        result = a * b
-        yo.history.append(f'Multiplied {a} and {b}: {result}')
-        return result
+    def multiplicar(yo, a, b):
+        resultado = a * b
+        yo.historial.append(f'Multiplied {a} y {b}: {resultado}')
+        retornar resultado
 
-    def divide(yo, a, b):
-        if b == 0:
-            imprimir('Error: Division by zero is not allowed.')
-            return None
-        result = a / b
-        yo.history.append(f'Divided {a} by {b}: {result}')
-        return result
+    def dividir(yo, a, b):
+        si b == 0:
+            imprimir('Error: Division by zero es no allowed.')
+            retornar Ninguno
+        resultado = a / b
+        yo.historial.append(f'Divided {a} by {b}: {resultado}')
+        retornar resultado
 
-    def show_history(yo):
+    def mostrar_historial(yo):
         imprimir('Calculation History:')
-        for record in yo.history:
-            imprimir(record)
+        para registro en yo.historial:
+            imprimir(registro)
 
-def count_adder(a):
+def contador_sumador(a):
     b = 20
 
-    def helper():
-        nonlocal b
+    def ayudante():
+        nolocal b
         b = 14
-        return lambda x: 20 if x == True else 10
-    return helper
-val = count_adder(10)()(True)
-if __name__ == '__main__':
-    greet_user('Alice')
-    radius = 5
-    area = calculate_circle_area(radius)
-    if area:
-        imprimir(f'The area of a circle with radius {radius} is {area:.2f}')
-    file_path = 'example.txt'
-    count_lines_in_file(file_path)
-    calc = Calculator()
-    imprimir(calc.add(10, 5))
-    imprimir(calc.subtract(10, 5))
-    imprimir(calc.multiply(10, 5))
-    imprimir(calc.divide(10, 0))
-    calc.show_history()
+        retornar lambda x: 20 si x == Verdadero sino 10
+    retornar ayudante
+valor = contador_sumador(10)()(True)
+si __name__ == '__main__':
+    saludar_usuario('Alice')
+    radio = 5
+    area = calcular_area_circulo(radio)
+    si area:
+        imprimir(f'The area of a circle con radius {radio} es {area:.2f}')
+    ruta_archivo = 'example.txt'
+    contar_lineas_en_archivo(ruta_archivo)
+    calc = Calculadora()
+    imprimir(calc.sumar(10, 5))
+    imprimir(calc.restar(10, 5))
+    imprimir(calc.multiplicar(10, 5))
+    imprimir(calc.dividir(10, 0))
+    calc.mostrar_historial()
