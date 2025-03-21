@@ -1,8 +1,8 @@
 import ast
 import translations
 import os
-import openai 
-
+import openai
+from collections import deque
 
 Languages = ["Persian", "Spanish", "Italian", "German", "French"]
 
@@ -54,13 +54,10 @@ def keyword_parser(code, translation_mapping):
             # Replace the word if it's a keyword in the translation dictionary
             if word in translation_mapping:
                 translated_line.append(translation_mapping[word])
-            elif word[0] == '(':
-                translated_line.append('(' + keyword_parser(word[1:-1] + ')', translation_mapping))
             else:
                 translated_line.append(word)
         # Reconstruct the translated line with indentation
         translated_lines.append(indent + " ".join(translated_line))
-
     # Reconstruct the entire translated code
     translated_code = "\n".join(translated_lines)
     return translated_code
@@ -105,50 +102,6 @@ def get_lang_mapping(language: str, direction: int):
         return translations.French[direction]
     elif language == "Italian":
         return translations.Italian[direction]
-    
-def reverse_keyword_parser(code: str, translation_mapping: dict):
-    """
-    Pre-process the code by replacing foreign-language keywords and built-ins
-    with their English equivalents.
-
-    Parameters:
-        code (str): The code in a foreign language (e.g., Spanish).
-        translation_mapping (dict): Dictionary mapping foreign-language keywords to English.
-
-    Returns:
-        str: The code converted to standard English Python syntax.
-    """
-    translated_lines = []
-    for line in code.split("\n"):
-        # Preserve leading indentation
-        leading_whitespace = len(line) - len(line.lstrip())
-        indent = " " * leading_whitespace
-        # Process the line
-        words = line.split()
-        translated_line = []
-        for word in words:
-            # Replace the word if it's in the translation mapping
-            if "." in word:
-                updated = ""
-                split = word.split(".")
-                i, length = 0, len(split)
-                for w in split:
-                    if w in translation_mapping:
-                        updated += translation_mapping[w]
-                        updated += "."
-                    elif i < length - 1:
-                        updated += w
-                        updated += "."
-                    else:
-                        updated += w
-                    i += 1
-                translated_line.append(updated)
-            elif word in translation_mapping:
-                translated_line.append(translation_mapping[word])
-            else:
-                translated_line.append(word)
-        translated_lines.append(indent + " ".join(translated_line))
-    return "\n".join(translated_lines)
 
 #Loads desired prompt from prompts directory
 def load_prompt(prompt: str):
@@ -210,10 +163,16 @@ def query_openai_translation(input_file: str, preprocessed: str, source_language
         )
         print(response)
         return response.choices[0].message.content
-    #
     except Exception as e:
         print(f"OpenAI API error: {e}")
         return False
+    
+def clean_file(file):
+    lines = file.split("\n")
+    lines.pop()
+    lines.pop(0)
+    code = "\n".join(lines)
+    return code
 
 def other_to_english(input_file: str, language: str, index: int):
     """
@@ -233,6 +192,7 @@ def other_to_english(input_file: str, language: str, index: int):
     preprocessed = keyword_parser(input_file, translation_mapping)
     preprocessed = ast_translation(preprocessed, translation_mapping)
     translated_code = query_openai_translation(input_file, preprocessed, language, "English")
+    cleaned_translated_code = clean_file(translated_code)
     if translated_code == False:
         print("failed to translate")
         return
@@ -257,11 +217,12 @@ def english_to_other(input_file: str, language: str, index: int):
     preprocessed = ast_translation(input_file, translation_mapping)
     preprocessed = keyword_parser(preprocessed, translation_mapping)
     translated_code = query_openai_translation(input_file, preprocessed, "English", language)
+    cleaned_translated_code = clean_file(translated_code)
     if translated_code == False:
         print("failed to translate")
         return
     with open("file_testing/test1.py", "w", encoding="utf-8") as file:
-        file.write(translated_code)
+        file.write(cleaned_translated_code)
         print(f"Python file test1.py successfully created")
 
 class KeywordTranslator(ast.NodeTransformer):

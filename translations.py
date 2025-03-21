@@ -108,7 +108,9 @@ Spanish = [{
     'vars': 'variables',
     'zip': 'zip',
     '__import__': '__importar__',
-    '__init__': '__inic__'}, 
+    '__init__': '__inic__',
+    'FileNotFoundError:': 'ErrorDeArchivoNoEncontrado:'
+    },
     
     {'Falso': 'False',
     'Ninguno': 'None',
@@ -216,7 +218,9 @@ Spanish = [{
     'variables': 'vars',
     'zip': 'zip',
     '__importar__': '__import__',
-    '__inic__': '__init__'}]
+    '__inic__': '__init__',
+    'ErrorDeArchivoNoEncontrado:': 'FileNotFoundError:'
+    }]
 
 Persian = [{}, {}]
 French = [{}, {}]

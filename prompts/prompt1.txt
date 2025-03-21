@@ -13,6 +13,7 @@ You will be given two Python files:
 - **Do NOT include any explanations, metadata, or formatting outside the Python code block.**
 
 ### **Example (English to Spanish)**
+
 #### **Original File:**
 def greet(name):  # This function prints a greeting
     print("Hello, " + name)
