@@ -1,7 +1,8 @@
 """
-Un script de Python de muestra para probar la traducción de código.
+Un script de Python de ejemplo para probar la traducción de código.
 Incluye clases, funciones, bucles, condicionales y funciones integradas.
 """
+
 importar math
 importar os
 
@@ -55,7 +56,7 @@ clase Calculadora:
 
     def dividir(yo, a, b):
         si b == 0:
-            imprimir('Error: División por cero no está permitida.')
+            imprimir('Error: La división por cero no está permitida.')
             retornar Ninguno
         resultado = a / b
         yo.historial.append(f'Dividido {a} por {b}: {resultado}')
@@ -76,18 +77,28 @@ def contador_sumador(a):
     retornar ayudante
 
 valor = contador_sumador(10)()(True)
+enteros = [1, 2, 3, 4]
+para i en rango(longitud(enteros)):
+    imprimir(enteros[i])
 
+# Bloque principal de ejecución
 si __name__ == '__main__':
     saludar_usuario('Alice')
+
+    # Calcular el área de un círculo
     radio = 5
     area = calcular_area_circulo(radio)
     si area:
         imprimir(f'El área de un círculo con radio {radio} es {area:.2f}')
+
+    # Ejemplo de manejo de archivos
     ruta_archivo = 'example.txt'
     contar_lineas_en_archivo(ruta_archivo)
+
+    # Usando la clase Calculadora
     calc = Calculadora()
     imprimir(calc.sumar(10, 5))
     imprimir(calc.restar(10, 5))
     imprimir(calc.multiplicar(10, 5))
-    imprimir(calc.dividir(10, 0))
+    imprimir(calc.dividir(10, 0))  # Probar división por cero
     calc.mostrar_historial()

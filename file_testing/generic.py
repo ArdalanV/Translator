@@ -12,7 +12,7 @@ def greet_user(name):
 
 
 def simple_function(brother: int) -> int:
-    if brother and (not brother) and (not (brother or brother)):
+    if brother and (not (not True )) and (not (brother or brother)):
         if 3 or True and False:
             return brother
 
@@ -76,6 +76,10 @@ def count_adder(a):
     return helper
 
 val = count_adder(10)()(True)
+integers = [1, 2, 3, 4]
+
+for i in range(len(integers)):
+    print(integers[i])
 
 # Main execution block
 if __name__ == "__main__":

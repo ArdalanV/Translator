@@ -2,6 +2,8 @@ import ast
 import translations
 import os
 import openai
+import tokenize
+import io
 from collections import deque
 
 Languages = ["Persian", "Spanish", "Italian", "German", "French"]
@@ -61,6 +63,28 @@ def keyword_parser(code, translation_mapping):
     # Reconstruct the entire translated code
     translated_code = "\n".join(translated_lines)
     return translated_code
+
+def preprocess_line(line, mapping):
+    print(line)
+    result = ""
+    g = tokenize.generate_tokens(io.StringIO(line).readline)
+    prev_end_col = 0
+    for toknum, tokval, (srow, scol), (erow, ecol), _ in g:
+        # preserve original spacing
+        spaces_needed = scol - prev_end_col
+        if spaces_needed > 0:
+            result += " " * spaces_needed
+        # translate tokens if needed
+        tokval_translated = mapping.get(tokval, tokval)
+        result += tokval_translated
+        prev_end_col = ecol
+    return result.rstrip()
+
+def process_code(code: str, mapping: dict):
+    lines = code.split("\n")
+    result = [preprocess_line(line, mapping) if line.strip() else "" for line in lines]
+    return "\n".join(result)
+
 
 def ast_translation(code: str, translation_mapping: dict):
     """
@@ -196,7 +220,7 @@ def other_to_english(input_file: str, language: str, index: int):
     if translated_code == False:
         print("failed to translate")
         return
-    with open("file_testing/test2.py", "w", encoding="utf-8") as file:
+    with open("../file_testing/test2.py", "w", encoding="utf-8") as file:
         file.write(translated_code)
         print(f"Python file test2.py successfully created")
     
@@ -215,13 +239,13 @@ def english_to_other(input_file: str, language: str, index: int):
     """
     translation_mapping = get_lang_mapping(language, index)
     preprocessed = ast_translation(input_file, translation_mapping)
-    preprocessed = keyword_parser(preprocessed, translation_mapping)
+    preprocessed = process_code(preprocessed, translation_mapping)
     translated_code = query_openai_translation(input_file, preprocessed, "English", language)
     cleaned_translated_code = clean_file(translated_code)
     if translated_code == False:
         print("failed to translate")
         return
-    with open("file_testing/test1.py", "w", encoding="utf-8") as file:
+    with open("../file_testing/test1.py", "w", encoding="utf-8") as file:
         file.write(cleaned_translated_code)
         print(f"Python file test1.py successfully created")
 
@@ -261,4 +285,3 @@ class KeywordTranslator(ast.NodeTransformer):
     def visit_IfExp(self, node):
         # Translate `else` within inline expressions like lambdas
         return self.generic_visit(node)  # Visit the children
-
