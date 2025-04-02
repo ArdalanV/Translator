@@ -65,7 +65,6 @@ def keyword_parser(code, translation_mapping):
     return translated_code
 
 def preprocess_line(line, mapping):
-    print(line)
     result = ""
     g = tokenize.generate_tokens(io.StringIO(line).readline)
     prev_end_col = 0
@@ -75,10 +74,10 @@ def preprocess_line(line, mapping):
         if spaces_needed > 0:
             result += " " * spaces_needed
         # translate tokens if needed
-        tokval_translated = mapping.get(tokval, tokval)
+        tokval_translated = tokval if tokval not in mapping else mapping[tokval]
         result += tokval_translated
         prev_end_col = ecol
-    return result.rstrip()
+    return result
 
 def process_code(code: str, mapping: dict):
     lines = code.split("\n")
